@@ -30,7 +30,7 @@ Exemplo de criação de uma queue no SQS:
 aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name teste
 ```
 
-No entanto, caso você não queria ou não precise ter o awscli instalado no seu computador, o localstack já disponibiliza o awscli instalado dentro dele através de um wrapper do `awscli` chamado `awslocal` que já vem pré-configurado para interagir localmente com os serviços mockados da aws.
+No entanto, caso você não queria ou não precise ter o `awscli` instalado no seu computador, o localstack já disponibiliza um wrapper do `awscli` chamado `awslocal` que já vem pré-configurado para interagir localmente com os serviços mockados da aws.
 
 Considerando que você esteja executando o projeto via docker é possível fazer o mesmo exemplo citado acima da seguinte maneira:
 
@@ -41,7 +41,7 @@ docker exec -it localstack sh
 awslocal sqs create-queue --queue-name teste 
 ```
 
-Observe que não precisamos adicionar o parâmetro `--endpoint-url` pois o `awslocal` já está configura assumindo que desejo me comunicar com os serviços localmente.
+Observe que não precisamos adicionar o parâmetro `--endpoint-url` pois o `awslocal` já está configurado assumindo que desejo me comunicar com os serviços localmente.
 
 
 > **⚠ Porque localhost:4566 ?**  

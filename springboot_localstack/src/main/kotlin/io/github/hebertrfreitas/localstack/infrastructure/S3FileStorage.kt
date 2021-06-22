@@ -3,6 +3,7 @@ package io.github.hebertrfreitas.localstack.infrastructure
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import software.amazon.awssdk.core.sync.RequestBody
 import software.amazon.awssdk.core.sync.ResponseTransformer
 import software.amazon.awssdk.services.s3.S3Client
 import software.amazon.awssdk.services.s3.model.*
@@ -18,8 +19,8 @@ class S3FileStorage(private val s3Client: S3Client): FileStorage {
         println("S3client : $s3Client")
     }
 
-    override fun putObject(data: Array<Byte>) {
-        TODO("Not yet implemented")
+    override fun putObject(bucketName:String, key: String, data: ByteArray) {
+        s3Client.putObject(PutObjectRequest.builder().bucket(bucketName).key(key).build(), RequestBody.fromBytes(data))
     }
 
     override fun createBucket(bucketName: String) {
@@ -30,11 +31,11 @@ class S3FileStorage(private val s3Client: S3Client): FileStorage {
     override fun listBuckets(): List<String> =
        s3Client.listBuckets().buckets().map { it.name() }
 
-    override fun listObjects(bucketName: String): List<InputStream> {
+    override fun listObjectsKeys(bucketName: String): List<String> {
 
         val listObjects = s3Client.listObjects(ListObjectsRequest.builder().bucket(bucketName).build())
         return listObjects.contents()
-            .map { getObject(bucketName, it.key()) }
+            .map { it.key() }
     }
 
     private fun getObject(bucketName: String, key : String): InputStream{

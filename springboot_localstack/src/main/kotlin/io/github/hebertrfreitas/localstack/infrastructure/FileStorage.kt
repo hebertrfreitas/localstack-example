@@ -7,8 +7,8 @@ interface FileStorage{
 
     fun createBucket(bucketName: String)
     fun listBuckets(): List<String>
-    fun putObject(data : Array<Byte>)
-    fun listObjects(bucketName: String) : List<InputStream>
+    fun putObject(bucketName:String, key:String, data : ByteArray)
+    fun listObjectsKeys(bucketName: String) : List<String>
     fun deleteObject(bucketName: String, key: String)
     fun deleteBucket(bucketName: String)
 }

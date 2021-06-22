@@ -4,6 +4,8 @@ import io.github.hebertrfreitas.localstack.infrastructure.S3FileStorage
 import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import java.io.ByteArrayOutputStream
+import java.io.File
 
 const val BUCKET_NAME = "test-bucket"
 
@@ -26,10 +28,28 @@ class S3Test {
     }
 
     @Test
-    fun `Test - DeleteObject`(){
+    fun `Test - DeleteBucket`(){
         assertDoesNotThrow { s3FileStorage.deleteBucket(BUCKET_NAME) }
         assert(s3FileStorage.listBuckets().isEmpty())
     }
+
+    @Test
+    fun `Test - Object Operations`(){
+        val key = "simple_file.txt"
+
+        s3FileStorage.createBucket(BUCKET_NAME)
+
+        val byteArray = this.javaClass.getResourceAsStream("/static/$key").readAllBytes()
+        s3FileStorage.putObject(BUCKET_NAME, key, byteArray)
+        assert(s3FileStorage.listObjectsKeys(BUCKET_NAME).any { it == key} )
+
+        assertDoesNotThrow { s3FileStorage.deleteObject(BUCKET_NAME, key) }
+        assert(s3FileStorage.listObjectsKeys(BUCKET_NAME).none { it == key })
+    }
+
+
+
+
 
 
 }
