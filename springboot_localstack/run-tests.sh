@@ -6,7 +6,7 @@ echo "Aguardando localstack ficar disponível na porta 4566..."
 
 while ! nc -z localhost 4566; do
   echo "Esperando..."
-  sleep 2 # wait for 1/10 of the second before check again
+  sleep 2 # wait two seconds
 done
 
 ./gradlew clean test

@@ -11,7 +11,7 @@ import java.io.InputStream
 
 
 @Service
-class S3FileStorage(private val s3Client: S3Client): FileStorage {
+class S3Storage(private val s3Client: S3Client) {
 
     val logger: Logger = LoggerFactory.getLogger(javaClass)
 
@@ -19,26 +19,26 @@ class S3FileStorage(private val s3Client: S3Client): FileStorage {
         println("S3client : $s3Client")
     }
 
-    override fun putObject(bucketName:String, key: String, data: ByteArray) {
+    fun putObject(bucketName: String, key: String, data: ByteArray) {
         s3Client.putObject(PutObjectRequest.builder().bucket(bucketName).key(key).build(), RequestBody.fromBytes(data))
     }
 
-    override fun createBucket(bucketName: String) {
+    fun createBucket(bucketName: String) {
         val createBucketResponse = s3Client.createBucket(CreateBucketRequest.builder().bucket(bucketName).build())
         logger.info("createBucket response = location: ${createBucketResponse.location()} ")
     }
 
-    override fun listBuckets(): List<String> =
-       s3Client.listBuckets().buckets().map { it.name() }
+    fun listBuckets(): List<String> =
+        s3Client.listBuckets().buckets().map { it.name() }
 
-    override fun listObjectsKeys(bucketName: String): List<String> {
+    fun listObjectsKeys(bucketName: String): List<String> {
 
         val listObjects = s3Client.listObjects(ListObjectsRequest.builder().bucket(bucketName).build())
         return listObjects.contents()
             .map { it.key() }
     }
 
-    private fun getObject(bucketName: String, key : String): InputStream{
+    fun getObject(bucketName: String, key: String): InputStream {
 
         return s3Client.getObject(
             GetObjectRequest.builder()
@@ -48,11 +48,20 @@ class S3FileStorage(private val s3Client: S3Client): FileStorage {
 
     }
 
-    override fun deleteObject(bucketName: String, key: String){
+    fun deleteObject(bucketName: String, key: String) {
         s3Client.deleteObject(DeleteObjectRequest.builder().bucket(bucketName).key(key).build())
     }
 
-    override fun deleteBucket(bucketName: String){
+    fun deleteBucket(bucketName: String) {
         s3Client.deleteBucket(DeleteBucketRequest.builder().bucket(bucketName).build())
     }
+
+    fun deleteObjects(bucketName: String, keys: List<String>) {
+        keys.forEach { key -> deleteObject(bucketName, key) }
+    }
+
+    fun deleteAllObjects(bucketName: String){
+        this.listObjectsKeys(bucketName).forEach { deleteObject(bucketName,it) }
+    }
+
 }

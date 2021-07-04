@@ -2,6 +2,14 @@
 
 Este projeto é um exemplo prático de comunicação com alguns dos principais serviços da aws.
 
+
+
+>OBS: Propositalmente neste projeto está sendo usado o SDK da AWS diretamente ao invês de facilidades como o spring cloud aws.
+>
+>O objetivo aqui era aprender a manipular o sdk e suas funcionalidades.
+
+
+
 Projeto feito usando spring boot e Kotlin.
 
 
@@ -10,7 +18,7 @@ Projeto feito usando spring boot e Kotlin.
  - docker
  
 
-O projeto contem classes de teste que simulam operações nos serviços da AWS.
+O projeto contém classes de teste que simulam operações nos serviços da AWS.
 
 Para que seja possível executar os testes é necessário que o localstack esteja sendo executado.
 
