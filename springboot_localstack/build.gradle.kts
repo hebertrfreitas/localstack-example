@@ -23,12 +23,14 @@ dependencyManagement{
 
 dependencies {
 	implementation("software.amazon.awssdk:s3:2.15.0")
+	implementation("software.amazon.awssdk:sqs:2.16.103")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	implementation("io.opentracing.contrib:opentracing-spring-jaeger-cloud-starter:3.3.1")
 }
 
 tasks.withType<KotlinCompile> {

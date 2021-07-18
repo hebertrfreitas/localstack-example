@@ -1,5 +1,6 @@
 package io.github.hebertrfreitas.localstack.infrastructure
 
+import io.opentracing.Tracer
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -11,7 +12,7 @@ import java.io.InputStream
 
 
 @Service
-class S3Storage(private val s3Client: S3Client) {
+class S3Storage(private val s3Client: S3Client,private val tracer: Tracer) {
 
     val logger: Logger = LoggerFactory.getLogger(javaClass)
 
@@ -24,8 +25,10 @@ class S3Storage(private val s3Client: S3Client) {
     }
 
     fun createBucket(bucketName: String) {
+        val span = tracer.buildSpan("createBucket").start()
         val createBucketResponse = s3Client.createBucket(CreateBucketRequest.builder().bucket(bucketName).build())
         logger.info("createBucket response = location: ${createBucketResponse.location()} ")
+        span.finish()
     }
 
     fun listBuckets(): List<String> =
