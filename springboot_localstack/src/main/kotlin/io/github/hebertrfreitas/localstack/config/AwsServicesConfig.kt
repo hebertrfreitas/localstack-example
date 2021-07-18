@@ -39,28 +39,25 @@ class AwsServicesConfig(val awsProperties: AwsProperties) {
     @Bean
     fun s3Client(): S3Client {
 
-        val s3ClientBuilder = S3Client.builder()
+        return S3Client.builder()
             .region(awsProperties.getAwsRegionEnum())
-
-        if (awsProperties.endpoint != null) {
-            s3ClientBuilder.endpointOverride(URI(awsProperties.endpoint))
-        }
-
-        return s3ClientBuilder.build()
+            .apply {
+                if(awsProperties.endpoint != null) endpointOverride(URI(awsProperties.endpoint))
+            }
+            .build()
     }
 
 
     @Bean
     fun sqsClient(): SqsClient {
 
-        val sqsClientBuilder = SqsClient.builder()
+        return SqsClient.builder()
             .region(Region.US_EAST_1)
+            .apply {
+                if(awsProperties.endpoint != null) endpointOverride(URI(awsProperties.endpoint))
+            }
+            .build()
 
-        if (awsProperties.endpoint != null) {
-            sqsClientBuilder.endpointOverride(URI(awsProperties.endpoint))
-        }
-
-        return sqsClientBuilder.build()
     }
 
 
